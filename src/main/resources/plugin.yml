@@ -1,0 +1,51 @@
+name: ${project.artifactId}
+main: ${project.groupId}.Engine
+version: ${project.version}
+depend: [Vault,NametagEdit]
+softdepend: [Herochat]
+loadbefore: [Essentials]
+authors: [steffansk1997, Tofuus]
+description: >
+             RolePlay Engine
+commands:
+  card:
+    description: Roleplay Character card
+  RP:
+    description: Switch to RolePlay Chat
+  OOC:
+    description: Switch to Out of Character Chat
+  whisper:
+    description: Whisper something
+    aliases: w
+  shout:
+    description: Whisper something
+    aliases: s
+  rpengine:
+    description: Admin Command of the RP engine
+    permission: rpengine.admin
+  bird:
+    description: Send a bird
+  countdown:
+    description: Starts a countdown
+  roll:
+    description: Rolls from a number
+  toggleooc:
+    description: Toggle the ooc chat
+  spawnpoint:
+    description: Teleport command for nation spawnpoints
+    aliases: [nationspawn, rpspawn, nationhome, rphome]
+
+permissions:
+  #Spawnpoint permissions
+  rpengine.spawnpoint.set.own:
+    description: Allows you to your own nations spawnpoint
+  rpengine.spawnpoint.set.all:
+    description: Allows you to set the spawnpoint for all nations
+  rpengine.spawnpoint.own:
+    description: Allows teleport to own nations spawnpoint
+  rpengine.spawnpoint.others:
+    description: Allows teleport to other nations
+
+  #Chat perms
+  rpengine.chat.color:
+    description: Allows you to use colors in the chat

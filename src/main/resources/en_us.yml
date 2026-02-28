@@ -1,0 +1,99 @@
+# Use & for color codes.
+# If you are unsure what color codes are go here http://minecraft.gamepedia.com/Formatting_codes
+title-name: "&f[&6RPEnginef4]"
+player-only: "Sorry but that can only be run by a player!"
+must-be-number: "&cError: &fPlease use a number not a word!."
+no-permissions: "&cError: &fYou don't have permission for that!"
+chat-disabled: "&cError: &fChat functionality disabled by admin"
+# %v = version number
+version: "&6Currently running version: &f %v."
+reload: "&6Plugin reloaded!"
+rp-join: "&eYou are now chatting in &f: RP."
+
+#Note: you can't use color codes with the card-field values
+# %p = MC Username
+# %g = Gender
+# %n = nation
+# %r = race
+# %f = card field
+# %v = value
+card-own: "&a-=-=-=-=- &bYour Card &a-=-=-=-=-"
+card-others: "&a-=-=-=-=-&b %p's card &a-=-=-=-=-"
+card-click-to-edit-fields: "&bClick the fields to edit them"
+card-select-gender: "&aSelect your Gender:"
+card-select-race: "&aSelect your Race:"
+card-select-nation: "&aSelect your Nations:"
+card-updated-to: "&a%f updated to&f: %v"
+#Note: you can't use color codes with the these values
+card-click-to-show: "Click to show your card"
+card-click-to-race: "Click to set your race to %r"
+card-click-to-nation: "Click to set your nation to %n"
+card-click-to-edit: "Click to edit"
+card-click-to-gender: "Click to set your gender to %g"
+card-click-to-race: "Click to set your race to %r"
+card-click-to-nation: "Click to set your nation to %r"
+card-field-name: "Name"
+card-field-age: "Age"
+card-field-gender: "Gender"
+card-field-gender-male: "Male"
+card-field-gender-female: "Female"
+card-field-gender-none: "None"
+card-field-race: "Race"
+card-field-nation: "Nation"
+card-field-desc: "Description"
+#From here on you can use color codes again
+
+# %n = RP Name
+# %p = MC Username
+# %c = Command
+bird-usage: "&cUsage: &f/bird [player] [message]."
+bird-offline: "&f%p &cis offline."
+bird-lost: "&cYour &abird &cgot lost."
+bird-deliver: "&bYour &abird &bhas delivered your letter to %n &f(%p)."
+bird-land: "&bA &abird &blands in front of you with a letter from %n &f(%p)."
+bird-sent: "&bYou've sent a &abird to %n &f(%p)."
+# %n = Number rolled
+# %r = Roleplay Name
+# %m = Max number
+# %c = Command
+roll-usage: "&cUsage: &f/roll [number]."
+roll-max: "&cNumber is too high. Please use a number below %n."
+roll-result: "&b%r &f(%p) &bhas rolled &6%n &bout of &6%m."
+roll-console: "&7 The Console &bhas rolled &6%n &bout of &6%m."
+# %m = Max countdown
+# %p = Player Username
+# %r = Rp Name
+# %n = Countdown start
+# %c = Command
+countdown-usage: "&cUsage: &f/countdown [time]."
+countdown-negative: "&CYou can not use a negative number!"
+countdown-max: "&cYou can not use a number over %m!"
+countdown-start: "&b%r &f(%p) &bhas started a countdown from &6%n."
+# %n = nation
+# %c = Command
+spawnpoint-usage: "&cUsage: &f/%c [%l]."
+spawnpoint-set-usage: "&cUsage: &f/%c set [%l]."
+spawnpoint-set: "&aSpawnpoint of &f%n &aset to your location"
+spawnpoint-no-nation: "&cError: &fPlease set your nation with /card nation"
+spawnpoint-config-error: "&cError: &fSomething went wrong with retrieving data from the config file"
+spawnpoint-teleport: "&aYou have been teleported to &f%n"
+# %n = RP Name
+# %m = Message
+# %c = Command
+chat-shout-usage: "&cUsage: &f/%c [message]."
+chat-shout-format: "&c[Shout] &7%n &f%m"
+chat-whisper-usage: "&cUsage: &f/%c [message]."
+chat-whisper-format: "&9[Whisper] &7%n &f%m"
+# %r = Race
+# %a = Max Age
+# %n = Nation
+# %p = Player
+card-name-usage: "&cUsage: &f/card name [name]"
+card-age-race-max: "&cError: &g%r can not be any older than %a"
+card-age-max: "&cError: &fYou can no be any older than %a"
+card-age-usage: "&cUsage: &f/card age [age]."
+card-gender-usage: "&cUsage: &f/card gender [male/female]."
+card-race-usage: "&cUsage: &f/card race %r."
+card-nation-usage: "&cUsage: &f/card nation %n."
+card-desc-usage: "&cUsage: &f/card desc [description]."
+card-offline: "&cError: &f%p is offline."

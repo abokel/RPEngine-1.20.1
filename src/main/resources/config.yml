@@ -1,0 +1,56 @@
+#Database type, either sqlite or mysql
+databasetype: sqlite
+table-prefix: rpen_
+
+#MySQL Connection settings, only needed when databasetype is set to mysql
+mysql:
+  host: localhost
+  user: root
+  password: 1234
+  database: minecraft
+  port: 3306
+
+#Debug
+debug: false
+
+#ChatSettings
+chatEnabled: true
+rpRange: 35
+whisperRange: 5
+shoutRange: 50
+logOOC: true
+logRP: false
+
+#MaxAge for if nothing is defined at the race:
+MaxAge: 75
+#Races
+Races:
+  Human:
+    Color: BLUE
+    MaxAge: 150
+    Plural: Humans
+#Nations
+Nations:
+  Amsterdam:
+    spawnX: 52
+    spawnY: 66
+    spawnZ: 4
+    spawnYaw: 0
+    spawnPitch: 0
+    spawnWorld: world
+    
+# Speed in block per second for birds
+speed: 20
+
+#Max for countdown and rolls
+maxRoll: 100
+maxCountdown: 20
+
+#The cooldown in-between card changes in seconds
+cardCooldown: 600
+
+#Player health (20 is one full row of hearts and the default value)
+playerHealth: 40
+
+# What language messages are sent in
+language: en_us
