@@ -2,7 +2,6 @@ package com.Alvaeron.commands;
 
 import java.util.Random;
 
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -26,14 +25,19 @@ public class RollCommand extends AbstractCommand {
 			return true;
 		}
 		if (args.length == 1) {
-			if (StringUtils.isNumeric(args[0])) {
-				if (Integer.parseInt(args[0]) <= plugin.getConfig().getInt("maxRoll")) {
-					number = Integer.parseInt(args[0]);
+			try {
+				int parsedNumber = Integer.parseInt(args[0]);
+				if (parsedNumber <= 0) {
+					sender.sendMessage(Lang.ROLL_USAGE.toString());
+					return true;
+				}
+				if (parsedNumber <= plugin.getConfig().getInt("maxRoll")) {
+					number = parsedNumber;
 				} else {
 					sender.sendMessage(Lang.ROLL_MAX.toString().replace("%n", Integer.toString(plugin.getConfig().getInt("maxRoll"))));
 					return true;
 				}
-			} else {
+			} catch (NumberFormatException ex) {
 				sender.sendMessage(Lang.ROLL_USAGE.toString());
 				return true;
 			}

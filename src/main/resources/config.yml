@@ -15,42 +15,62 @@ debug: false
 
 #ChatSettings
 chatEnabled: true
-rpRange: 35
-whisperRange: 5
+rpRange: 25
+whisperRange: 3
 shoutRange: 50
 logOOC: true
-logRP: false
+logRP: true
 
 #MaxAge for if nothing is defined at the race:
 MaxAge: 75
 #Races
 Races:
   Human:
-    Color: BLUE
-    MaxAge: 150
+    Color: BROWN
+    MaxAge: 100
     Plural: Humans
+  Elf:
+    Color: WHITE
+    MaxAge: 1000
+    Plural: Elves
+  Makiuras:
+    Color: YELLOW
+    MaxAge: 100
+    Plural: Makiuras
+  Fomuri:
+    Color: PURPLE
+    MaxAge: 150
+    Plural: Fomuri
+  Syltyr:
+    Color: BLUE
+    MaxAge: 1000
+    Plural: Syltyr
+  Sarfnydd:
+    Color: GREEN
+    MaxAge: 50
+    Plural: Sarf
 #Nations
 Nations:
-  Amsterdam:
-    spawnX: 52
-    spawnY: 66
-    spawnZ: 4
+  Humanity:
+    spawnX: 0
+    spawnY: 0
+    spawnZ: 0
     spawnYaw: 0
     spawnPitch: 0
     spawnWorld: world
     
 # Speed in block per second for birds
-speed: 20
+speed: 5
 
 #Max for countdown and rolls
-maxRoll: 100
+maxRoll: 1000
 maxCountdown: 20
 
 #The cooldown in-between card changes in seconds
 cardCooldown: 600
 
 #Player health (20 is one full row of hearts and the default value)
-playerHealth: 40
+playerHealth: 20
 
 # What language messages are sent in
 language: en_us

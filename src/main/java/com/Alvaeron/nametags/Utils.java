@@ -1,6 +1,5 @@
 package com.Alvaeron.nametags;
 
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -25,7 +24,25 @@ public class Utils {
 	}
 	
     public static String format(String[] text, int to, int from) {
-        return StringUtils.join(text, ' ', to, from).replace("'", "");
+        if (text == null || text.length == 0) {
+            return "";
+        }
+
+        int start = Math.max(0, to);
+        int end = Math.min(text.length, from);
+        if (start >= end) {
+            return "";
+        }
+
+        StringBuilder builder = new StringBuilder();
+        for (int index = start; index < end; index++) {
+            if (builder.length() > 0) {
+                builder.append(' ');
+            }
+            builder.append(text[index]);
+        }
+
+        return builder.toString().replace("'", "");
     }
 
     public static String deformat(String input) {

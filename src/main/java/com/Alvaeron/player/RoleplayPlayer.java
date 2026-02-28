@@ -2,18 +2,13 @@ package com.Alvaeron.player;
 
 import java.util.UUID;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.Alvaeron.Engine;
-import com.nametagedit.plugin.NametagEdit;
+import com.Alvaeron.utils.NametagBridge;
 
-@AllArgsConstructor
-@Getter
 public class RoleplayPlayer {
 
 	UUID uuid;
@@ -29,17 +24,77 @@ public class RoleplayPlayer {
 	boolean online = true;
 	private Engine plugin;
 
+	public RoleplayPlayer(UUID uuid, String playerName, String name, String race, String nation, Gender gender,
+			int age, String desc, Channel channel, boolean OOC, boolean online, Engine plugin) {
+		this.uuid = uuid;
+		this.playerName = playerName;
+		this.name = name;
+		this.race = race;
+		this.nation = nation;
+		this.gender = gender;
+		this.age = age;
+		this.desc = desc;
+		this.channel = channel;
+		this.OOC = OOC;
+		this.online = online;
+		this.plugin = plugin;
+	}
+
 	public RoleplayPlayer(Player pl) {
 		this.uuid = pl.getUniqueId();
 		this.playerName = pl.getName();
 	}
 
 	public Player getPlayer() {
-		if(Bukkit.getPlayer(uuid) != null){
-			return Bukkit.getPlayer(uuid);
-		}else{
-			return (Player) Bukkit.getOfflinePlayer(uuid);
-		}
+		return Bukkit.getPlayer(uuid);
+	}
+
+	public UUID getUuid() {
+		return uuid;
+	}
+
+	public String getPlayerName() {
+		return playerName;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String getRace() {
+		return race;
+	}
+
+	public String getNation() {
+		return nation;
+	}
+
+	public Gender getGender() {
+		return gender;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public String getDesc() {
+		return desc;
+	}
+
+	public Channel getChannel() {
+		return channel;
+	}
+
+	public boolean isOOC() {
+		return OOC;
+	}
+
+	public boolean isOnline() {
+		return online;
+	}
+
+	public Engine getPlugin() {
+		return plugin;
 	}
 
 	public void setGender(Gender gender) {
@@ -100,8 +155,12 @@ public class RoleplayPlayer {
 		this.OOC = ooc;
 	}
 	public void setTag() {
-		NametagEdit.getApi().setPrefix(getPlayer(), Engine.mu.getRaceColour(race) + name.substring(0, Math.min(9, name.length())) + ChatColor.GRAY + " [");
-		NametagEdit.getApi().setSuffix(getPlayer(), "]");
+		Player player = getPlayer();
+		if (player == null) {
+			return;
+		}
+		NametagBridge.setPrefix(player, Engine.mu.getRaceColour(race) + name.substring(0, Math.min(9, name.length())) + ChatColor.GRAY + " [");
+		NametagBridge.setSuffix(player, "]");
 	}
 
 	public static enum Channel {

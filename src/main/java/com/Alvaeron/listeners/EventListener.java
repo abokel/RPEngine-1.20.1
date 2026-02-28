@@ -42,15 +42,12 @@ public class EventListener implements Listener {
 		RoleplayPlayer rpp = Engine.manager.getPlayer(player.getUniqueId());
 
 		if (rpp.getChannel() == Channel.OOC) {
-			if (plugin.vault && Engine.chat != null) { // Confirms vault is installed before using it for prefixes
-				if (Engine.chat.getPlayerPrefix(player) != null) {
-					if (!Engine.chat.getPlayerPrefix(player).equals("")) {
-						format = ChatColor.translateAlternateColorCodes('&',
-								"[OOC] " + Engine.chat.getPlayerPrefix(player) + " " + player.getDisplayName()
-										+ ChatColor.WHITE + Engine.chat.getPlayerSuffix(player) + ": %2$s");
-					} else {
-						format = "[OOC] " + player.getDisplayName() + ChatColor.WHITE + ": %2$s";
-					}
+			if (plugin.vaultEnabled) {
+				String prefix = Engine.getVaultPrefix(player);
+				String suffix = Engine.getVaultSuffix(player);
+				if (!prefix.equals("") || !suffix.equals("")) {
+					format = ChatColor.translateAlternateColorCodes('&',
+							"[OOC] " + prefix + " " + player.getDisplayName() + ChatColor.WHITE + suffix + ": %2$s");
 				} else {
 					format = "[OOC] " + player.getDisplayName() + ChatColor.WHITE + ": %2$s";
 				}
