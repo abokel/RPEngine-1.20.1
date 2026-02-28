@@ -22,7 +22,6 @@ public class CardCommand extends AbstractCommand {
 		super(plugin, Senders.PLAYER);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean handleCommand(CommandSender sender, Command cmd, String Commandlabel, String[] args) {
 		// Name Field
@@ -152,7 +151,16 @@ public class CardCommand extends AbstractCommand {
 			}
 			// Race Field
 			else if (args[0].equalsIgnoreCase("race")) {
-				final Set<String> races = plugin.getConfig().getConfigurationSection("Races").getKeys(false);
+				Set<String> races = null;
+				if (plugin.getConfig().getConfigurationSection("Races") != null) {
+					races = plugin.getConfig().getConfigurationSection("Races").getKeys(false);
+				} else if (plugin.getConfig().getConfigurationSection("races") != null) {
+					races = plugin.getConfig().getConfigurationSection("races").getKeys(false);
+				}
+				if (races == null || races.isEmpty()) {
+					player.sendMessage(ChatColor.RED + "No races configured.");
+					return true;
+				}
 				if (args.length == 2) {
 					if (Engine.mu.containsCaseInsensitive(args[1], races)) {
 						if (cardTime(player, "race")) {
@@ -183,7 +191,16 @@ public class CardCommand extends AbstractCommand {
 			}
 			// Nation Field
 			else if (args[0].equalsIgnoreCase("nation")) {
-				Set<String> nations = plugin.getConfig().getConfigurationSection("Nations").getKeys(false);
+				Set<String> nations = null;
+				if (plugin.getConfig().getConfigurationSection("Nations") != null) {
+					nations = plugin.getConfig().getConfigurationSection("Nations").getKeys(false);
+				} else if (plugin.getConfig().getConfigurationSection("nations") != null) {
+					nations = plugin.getConfig().getConfigurationSection("nations").getKeys(false);
+				}
+				if (nations == null || nations.isEmpty()) {
+					player.sendMessage(ChatColor.RED + "No nations configured.");
+					return true;
+				}
 				if (args.length == 2) {
 					if (Engine.mu.containsCaseInsensitive(args[1], nations)) {
 						if (cardTime(player, "nation")) {

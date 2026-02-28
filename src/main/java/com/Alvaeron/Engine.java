@@ -47,7 +47,7 @@ public class Engine extends JavaPlugin {
 	public static Economy econ = null;
 	public static Permission perms = null;
 	public static Chat chat = null;
-	public Boolean vault = false;
+	public Boolean vaultEnabled = false;
 
 	@Override
 	public void onDisable() {
@@ -94,30 +94,32 @@ public class Engine extends JavaPlugin {
 		getCommand("toggleooc").setExecutor(ch);
 	}
 
-	private boolean setupEconomy() {
+	private boolean setupChat() {
 		if (getServer().getPluginManager().getPlugin("Vault") == null) {
 			return false;
 		}
-		RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+		RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
 		if (rsp == null) {
 			return false;
 		}
-		econ = rsp.getProvider();
-		return econ != null;
-	}
-
-	private boolean setupChat() {
-		RegisteredServiceProvider<Chat> rsp = getServer().getServicesManager().getRegistration(Chat.class);
-		if(rsp != null)
-			chat = rsp.getProvider();
+		chat = rsp.getProvider();
 		return chat != null;
 	}
 
-	private boolean setupPermissions() {
-		RegisteredServiceProvider<Permission> rsp = getServer().getServicesManager().getRegistration(Permission.class);
-		if(rsp != null)
-			perms = rsp.getProvider();
-		return perms != null;
+	public static String getVaultPrefix(Player player) {
+		if (chat == null || player == null) {
+			return "";
+		}
+		String prefix = chat.getPlayerPrefix(player);
+		return prefix == null ? "" : prefix;
+	}
+
+	public static String getVaultSuffix(Player player) {
+		if (chat == null || player == null) {
+			return "";
+		}
+		String suffix = chat.getPlayerSuffix(player);
+		return suffix == null ? "" : suffix;
 	}
 
 	/**
@@ -200,14 +202,11 @@ public class Engine extends JavaPlugin {
         }
 	}
 	private void checkSoftDependencies() {
-		// Vault
-		if (!setupEconomy()) {
-			getLogger().log(Level.WARNING, "Vault not found.");
-			vault = false;
+		if (!setupChat()) {
+			getLogger().log(Level.WARNING, "Vault chat provider not found.");
+			vaultEnabled = false;
 		} else {
-			setupChat();
-			setupPermissions();
-			vault = true;
+			vaultEnabled = true;
 		}
 	}
 	public void disablePlugin(){

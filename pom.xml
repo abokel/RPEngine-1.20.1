@@ -3,14 +3,18 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.Alvaeron</groupId>
 	<artifactId>RPEngine</artifactId>
-	<version>4.5.5</version>
+	<version>4.5.6</version>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>16</maven.compiler.source>
-		<maven.compiler.target>16</maven.compiler.target>
-		<java.version>16</java.version>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		<java.version>17</java.version>
 	</properties>
 	<repositories>
+		<repository>
+			<id>codemc-repo</id>
+			<url>https://repo.codemc.io/repository/maven-public/</url>
+		</repository>
 		<repository>
 	        <id>jitpack.io</id>
 	        <url>https://jitpack.io</url>
@@ -19,34 +23,25 @@
 			<id>spigot-repo</id>
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
-		<repository>
-		    <id>upstream</id>
-		    <url>https://ci.nametagedit.com/plugin/repository/everything/</url>
-		</repository>
 	</repositories>
 	<dependencies>
 		<dependency>
-            <groupId>com.github.MilkBowl</groupId>
-            <artifactId>VaultAPI</artifactId>
-            <version>1.7</version>
+			<groupId>com.github.MilkBowl</groupId>
+			<artifactId>VaultAPI</artifactId>
+			<version>1.7.1</version>
             <scope>provided</scope>
         </dependency>
 		<dependency>
 	        <groupId>org.spigotmc</groupId>
 	        <artifactId>spigot-api</artifactId>
-	        <version>1.17.1-R0.1-SNAPSHOT</version>
+	        <version>1.20.1-R0.1-SNAPSHOT</version>
 	        <scope>provided</scope>
      	</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.20</version>
+			<version>1.18.34</version>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-		    <groupId>com.nametagedit</groupId>
-		    <artifactId>nametagedit</artifactId>
-		    <version>4.5.0</version>
 		</dependency>
 	</dependencies>
 
@@ -61,7 +56,7 @@
 				<includes>
 					<include>plugin.yml</include>
 					<include>config.yml</include>
-					<include>en_us</include>
+					<include>en_us.yml</include>
 				</includes>
 			</resource>
 		</resources>
