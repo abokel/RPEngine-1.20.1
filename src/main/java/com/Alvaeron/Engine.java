@@ -17,6 +17,7 @@ import com.Alvaeron.commands.BirdCommand;
 import com.Alvaeron.commands.CardCommand;
 import com.Alvaeron.commands.ChatCommands;
 import com.Alvaeron.commands.CountdownCommand;
+import com.Alvaeron.commands.DisplayCommand;
 import com.Alvaeron.commands.RPEngineCommand;
 import com.Alvaeron.commands.RollCommand;
 import com.Alvaeron.commands.SpawnPointCommand;
@@ -26,6 +27,7 @@ import com.Alvaeron.player.PlayerManager;
 import com.Alvaeron.utils.Card;
 import com.Alvaeron.utils.Lang;
 import com.Alvaeron.utils.MessageUtil;
+import com.Alvaeron.utils.OverheadNameManager;
 
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -38,6 +40,7 @@ public class Engine extends JavaPlugin {
 	public static EventListener listener = null;
 	public static PlayerManager manager = null;
 	public static Card card = null;
+	public static OverheadNameManager overheadNames = null;
 	public static Engine rpEngine = null;
 	public static Utils utils = null;
 	public static YamlConfiguration LANG;
@@ -51,6 +54,9 @@ public class Engine extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		if (overheadNames != null) {
+			overheadNames.clearAll();
+		}
 		mm.onDisable();
 	}
 
@@ -63,6 +69,7 @@ public class Engine extends JavaPlugin {
 		card = new Card(this);
 		rpEngine = this;
 		utils = new Utils(this);
+		overheadNames = new OverheadNameManager(this);
 
 		this.getServer().getPluginManager().registerEvents(manager, this);
 		this.getServer().getPluginManager().registerEvents(Engine.listener, this);
@@ -77,6 +84,13 @@ public class Engine extends JavaPlugin {
 		checkSoftDependencies();
 
 		loadLang();
+
+		Bukkit.getScheduler().runTaskTimer(this, new Runnable() {
+			@Override
+			public void run() {
+				overheadNames.tick();
+			}
+		}, 1L, 1L);
 	}
 
 	private void loadCommands() {
@@ -86,6 +100,9 @@ public class Engine extends JavaPlugin {
 		getCommand("countdown").setExecutor(new CountdownCommand(this));
 		getCommand("rpengine").setExecutor(new RPEngineCommand(this));
 		getCommand("spawnpoint").setExecutor(new SpawnPointCommand(this));
+		DisplayCommand displayCommand = new DisplayCommand(this);
+		getCommand("nametag").setExecutor(displayCommand);
+		getCommand("tablist").setExecutor(displayCommand);
 		ChatCommands ch = new ChatCommands(this);
 		getCommand("whisper").setExecutor(ch);
 		getCommand("shout").setExecutor(ch);
@@ -184,6 +201,7 @@ public class Engine extends JavaPlugin {
 				conf.set(item.getPath(), item.getDefault());
 			}
 		}
+		migrateChatFormats(conf);
 
 		Lang.setFile(conf);
 		try {
@@ -194,6 +212,18 @@ public class Engine extends JavaPlugin {
 			if(Engine.utils.sendDebug()){
 				e.printStackTrace();
 			}
+		}
+	}
+
+	private void migrateChatFormats(YamlConfiguration conf) {
+		String currentShout = conf.getString(Lang.CHAT_SHOUT_FORMAT.getPath(), "");
+		String currentWhisper = conf.getString(Lang.CHAT_WHISPER_FORMAT.getPath(), "");
+
+		if ("&c[Shout] &7%n &f%m".equals(currentShout)) {
+			conf.set(Lang.CHAT_SHOUT_FORMAT.getPath(), Lang.CHAT_SHOUT_FORMAT.getDefault());
+		}
+		if ("&9[Whisper] &7%n &f%m".equals(currentWhisper)) {
+			conf.set(Lang.CHAT_WHISPER_FORMAT.getPath(), Lang.CHAT_WHISPER_FORMAT.getDefault());
 		}
 	}
 	public void debug(String message) {

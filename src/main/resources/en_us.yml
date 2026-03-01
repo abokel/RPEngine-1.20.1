@@ -81,9 +81,9 @@ spawnpoint-teleport: "&aYou have been teleported to &f%n"
 # %m = Message
 # %c = Command
 chat-shout-usage: "&cUsage: &f/%c [message]."
-chat-shout-format: "&c[Shout] &7%n &f%m"
+chat-shout-format: "&c%n &l%m"
 chat-whisper-usage: "&cUsage: &f/%c [message]."
-chat-whisper-format: "&9[Whisper] &7%n &f%m"
+chat-whisper-format: "&5%n &o%m"
 # %r = Race
 # %a = Max Age
 # %n = Nation

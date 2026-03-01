@@ -69,6 +69,11 @@ maxCountdown: 20
 #The cooldown in-between card changes in seconds
 cardCooldown: 600
 
+#Display toggles (both false = off by default)
+display:
+  hideHeadNamesDefault: false
+  hideTabListDefault: false
+
 #Player health (20 is one full row of hearts and the default value)
 playerHealth: 20
 

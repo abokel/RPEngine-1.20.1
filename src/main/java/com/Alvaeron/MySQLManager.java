@@ -164,7 +164,9 @@ public class MySQLManager {
 						sql3.setString(2, uuid.toString());
 						sql3.executeUpdate();
 						sql3.close();
-						Engine.manager.addPlayer(new RoleplayPlayer(uuid, playerName, rs.getString("name"), rs.getString("race"), rs.getString("nation"), Gender.valueOf(rs.getString("gender").toUpperCase()), rs.getInt("age"), rs.getString("desc"), Channel.RP, true, online,plugin));
+						RoleplayPlayer loadedPlayer = new RoleplayPlayer(uuid, playerName, rs.getString("name"), rs.getString("race"), rs.getString("nation"), Gender.valueOf(rs.getString("gender").toUpperCase()), rs.getInt("age"), rs.getString("desc"), Channel.RP, true, online,plugin);
+						Engine.manager.addPlayer(loadedPlayer);
+						Engine.card.saveCard(loadedPlayer);
 						if (rs.getInt("ooc") == 0) {
 							setStringField(uuid, "ooc", "1");
 						}
@@ -182,7 +184,9 @@ public class MySQLManager {
 						sql2.setString(10, "1");
 						sql2.execute();
 						sql2.close();
-						Engine.manager.addPlayer(new RoleplayPlayer(uuid, playerName, playerName, "NONE", "NONE", Gender.NONE, 0, "NONE", Channel.RP, true, online,plugin));
+						RoleplayPlayer newPlayer = new RoleplayPlayer(uuid, playerName, playerName, "NONE", "NONE", Gender.NONE, 0, "NONE", Channel.RP, true, online,plugin);
+						Engine.manager.addPlayer(newPlayer);
+						Engine.card.saveCard(newPlayer);
 					}
 					sql.close();
 					rs.close();

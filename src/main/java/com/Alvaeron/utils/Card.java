@@ -1,10 +1,14 @@
 package com.Alvaeron.utils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Set;
 import java.util.Collections;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import com.Alvaeron.Engine;
@@ -12,9 +16,69 @@ import com.Alvaeron.player.RoleplayPlayer;
 
 public class Card {
 	private Engine plugin;
+	private File cardsFile;
+	private YamlConfiguration cardsConfig;
 
 	public Card(Engine plugin) {
 		this.plugin = plugin;
+		cardsFile = new File(plugin.getDataFolder(), "cards.yml");
+		if (!plugin.getDataFolder().exists()) {
+			plugin.getDataFolder().mkdirs();
+		}
+		if (!cardsFile.exists()) {
+			try {
+				cardsFile.createNewFile();
+			} catch (IOException e) {
+				if (Engine.utils.sendDebug()) {
+					e.printStackTrace();
+				}
+			}
+		}
+		cardsConfig = YamlConfiguration.loadConfiguration(cardsFile);
+	}
+
+	public synchronized void saveCard(RoleplayPlayer rpp) {
+		if (rpp == null) {
+			return;
+		}
+		String base = "cards." + rpp.getUuid();
+		cardsConfig.set(base + ".uuid", rpp.getUuid().toString());
+		cardsConfig.set(base + ".username", rpp.getPlayerName());
+		cardsConfig.set(base + ".usernameLower", safeValue(rpp.getPlayerName()).toLowerCase());
+		cardsConfig.set(base + ".name", safeValue(rpp.getName()));
+		cardsConfig.set(base + ".race", safeValue(rpp.getRace()));
+		cardsConfig.set(base + ".nation", safeValue(rpp.getNation()));
+		cardsConfig.set(base + ".gender", rpp.getGender().name());
+		cardsConfig.set(base + ".age", rpp.getAge());
+		cardsConfig.set(base + ".desc", safeValue(rpp.getDesc()));
+		saveCardsFile();
+	}
+
+	public synchronized OfflineCard getOfflineCard(String lookup) {
+		if (lookup == null || lookup.trim().isEmpty()) {
+			return null;
+		}
+		ConfigurationSection cardsSection = cardsConfig.getConfigurationSection("cards");
+		if (cardsSection == null) {
+			return null;
+		}
+		String lowerLookup = lookup.toLowerCase();
+		for (String id : cardsSection.getKeys(false)) {
+			String base = "cards." + id;
+			String usernameLower = cardsConfig.getString(base + ".usernameLower", "");
+			String rpName = cardsConfig.getString(base + ".name", "NONE");
+			if (lowerLookup.equals(usernameLower) || lowerLookup.equals(rpName.toLowerCase())) {
+				return new OfflineCard(
+						cardsConfig.getString(base + ".username", "UNKNOWN"),
+						rpName,
+						cardsConfig.getString(base + ".race", "NONE"),
+						cardsConfig.getString(base + ".nation", "NONE"),
+						cardsConfig.getString(base + ".gender", "NONE"),
+						cardsConfig.getInt(base + ".age", 0),
+						cardsConfig.getString(base + ".desc", "NONE"));
+			}
+		}
+		return null;
 	}
 
 	public void sendCard(RoleplayPlayer rpp) {
@@ -32,13 +96,27 @@ public class Card {
 	}
 
 	public void sendCardOther(RoleplayPlayer rpp, Player reciever) {
-		reciever.sendMessage(Lang.CARD_OTHERS.toString().replace("%p", rpp.getPlayer().getName()));
+		if (rpp == null) {
+			reciever.sendMessage(Lang.CARD_OFFLINE.toString().replace("%p", "Unknown"));
+			return;
+		}
+		reciever.sendMessage(Lang.CARD_OTHERS.toString().replace("%p", rpp.getName()));
 		reciever.sendMessage(ChatColor.GREEN + Lang.CARD_FIELD_NAME.toString() + ": " + ChatColor.WHITE + rpp.getName());
 		reciever.sendMessage(ChatColor.GREEN + Lang.CARD_FIELD_AGE.toString() + ": " + ChatColor.WHITE + rpp.getAge());
 		reciever.sendMessage(ChatColor.GREEN + Lang.CARD_FIELD_GENDER.toString() + ": " + ChatColor.WHITE + Lang.valueOf("CARD_FIELD_GENDER_" + rpp.getGender().getName().toUpperCase()).toString());
 		reciever.sendMessage(ChatColor.GREEN + Lang.CARD_FIELD_RACE.toString() + ": " + ChatColor.WHITE + safeValue(rpp.getRace()));
 		reciever.sendMessage(ChatColor.GREEN + Lang.CARD_FIELD_NATION.toString() + ": " + ChatColor.WHITE + safeValue(rpp.getNation()));
 		reciever.sendMessage(ChatColor.GREEN + Lang.CARD_FIELD_DESC.toString() + ": " + ChatColor.WHITE + rpp.getDesc());
+	}
+
+	public void sendCardOther(OfflineCard card, Player reciever) {
+		reciever.sendMessage(Lang.CARD_OTHERS.toString().replace("%p", card.name));
+		reciever.sendMessage(ChatColor.GREEN + Lang.CARD_FIELD_NAME.toString() + ": " + ChatColor.WHITE + card.name);
+		reciever.sendMessage(ChatColor.GREEN + Lang.CARD_FIELD_AGE.toString() + ": " + ChatColor.WHITE + card.age);
+		reciever.sendMessage(ChatColor.GREEN + Lang.CARD_FIELD_GENDER.toString() + ": " + ChatColor.WHITE + resolveGenderLabel(card.gender));
+		reciever.sendMessage(ChatColor.GREEN + Lang.CARD_FIELD_RACE.toString() + ": " + ChatColor.WHITE + safeValue(card.race));
+		reciever.sendMessage(ChatColor.GREEN + Lang.CARD_FIELD_NATION.toString() + ": " + ChatColor.WHITE + safeValue(card.nation));
+		reciever.sendMessage(ChatColor.GREEN + Lang.CARD_FIELD_DESC.toString() + ": " + ChatColor.WHITE + safeValue(card.desc));
 	}
 
 	public void sendGenderSelect(RoleplayPlayer rpp) {
@@ -134,6 +212,44 @@ public class Card {
 				return "gold";
 			default:
 				return fallback;
+		}
+	}
+
+	private String resolveGenderLabel(String gender) {
+		try {
+			return Lang.valueOf("CARD_FIELD_GENDER_" + safeValue(gender).toUpperCase()).toString();
+		} catch (IllegalArgumentException ex) {
+			return Lang.CARD_FIELD_GENDER_NONE.toString();
+		}
+	}
+
+	private synchronized void saveCardsFile() {
+		try {
+			cardsConfig.save(cardsFile);
+		} catch (IOException e) {
+			if (Engine.utils.sendDebug()) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static class OfflineCard {
+		public final String username;
+		public final String name;
+		public final String race;
+		public final String nation;
+		public final String gender;
+		public final int age;
+		public final String desc;
+
+		public OfflineCard(String username, String name, String race, String nation, String gender, int age, String desc) {
+			this.username = username;
+			this.name = name;
+			this.race = race;
+			this.nation = nation;
+			this.gender = gender;
+			this.age = age;
+			this.desc = desc;
 		}
 	}
 }

@@ -30,7 +30,7 @@ public class CountdownCommand extends AbstractCommand {
 					Engine.mu.sendRangedMessage(player
 							, Lang.COUNTDOWN_START.toString()
 							.replace("%r", rpp.getName())
-							.replace("%p", rpp.getPlayer().getName())
+							.replace("%p", rpp.getName())
 							.replace("%n", Integer.toString(n))
 							, "rpRange");
 					final Countdown c = new Countdown(plugin);

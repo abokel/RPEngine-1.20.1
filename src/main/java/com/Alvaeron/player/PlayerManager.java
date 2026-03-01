@@ -33,6 +33,7 @@ public class PlayerManager implements Listener {
 	public void onQuit(PlayerQuitEvent event) {
 		clearPlayer(event.getPlayer().getUniqueId());
 		NametagBridge.clearNametag(event.getPlayer());
+		Engine.overheadNames.remove(event.getPlayer());
 	}
 
 	public void clearPlayer(UUID u) {

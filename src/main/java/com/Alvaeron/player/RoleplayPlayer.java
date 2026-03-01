@@ -22,6 +22,8 @@ public class RoleplayPlayer {
 	Channel channel = Channel.RP;
 	boolean OOC = false;
 	boolean online = true;
+	boolean headNameHidden = false;
+	boolean tabListHidden = false;
 	private Engine plugin;
 
 	public RoleplayPlayer(UUID uuid, String playerName, String name, String race, String nation, Gender gender,
@@ -38,6 +40,10 @@ public class RoleplayPlayer {
 		this.OOC = OOC;
 		this.online = online;
 		this.plugin = plugin;
+		if (plugin != null) {
+			this.headNameHidden = plugin.getConfig().getBoolean("display.hideHeadNamesDefault", false);
+			this.tabListHidden = plugin.getConfig().getBoolean("display.hideTabListDefault", false);
+		}
 	}
 
 	public RoleplayPlayer(Player pl) {
@@ -100,34 +106,40 @@ public class RoleplayPlayer {
 	public void setGender(Gender gender) {
 		this.gender = gender;
 		Engine.mm.setStringField(uuid, "gender", gender.name());
+		Engine.card.saveCard(this);
 	}
 
 	public void setAge(int age) {
 		this.age = age;
 		getPlayer().sendMessage(ChatColor.GREEN + "Age updated to" + ChatColor.WHITE + ": " + age);
 		Engine.mm.setStringField(uuid, "age", age + "");
+		Engine.card.saveCard(this);
 	}
 
 	public void setDesc(String description) {
 		this.desc = description;
 		Engine.mm.setStringField(uuid, "desc", desc);
+		Engine.card.saveCard(this);
 	}
 
 	public void setName(String name) {
 		this.name = name;
 		Engine.mm.setStringField(uuid, "name", name);
+		Engine.card.saveCard(this);
 		setTag();
 	}
 
 	public void setRace(String race) {
 		this.race = race;
 		Engine.mm.setStringField(uuid, "race", race);
+		Engine.card.saveCard(this);
 		setTag();
 	}
 
 	public void setNation(String nation) {
 		this.nation = nation;
 		Engine.mm.setStringField(uuid, "nation", nation);
+		Engine.card.saveCard(this);
 	}
 
 	public void switchOOC() {
@@ -154,13 +166,53 @@ public class RoleplayPlayer {
 	public void setOOC(boolean ooc){
 		this.OOC = ooc;
 	}
+
+	public boolean isHeadNameHidden() {
+		return headNameHidden;
+	}
+
+	public void setHeadNameHidden(boolean headNameHidden) {
+		this.headNameHidden = headNameHidden;
+		setTag();
+	}
+
+	public boolean isTabListHidden() {
+		return tabListHidden;
+	}
+
+	public void setTabListHidden(boolean tabListHidden) {
+		this.tabListHidden = tabListHidden;
+		applyTabListVisibility();
+	}
+
 	public void setTag() {
 		Player player = getPlayer();
 		if (player == null) {
 			return;
 		}
-		NametagBridge.setPrefix(player, Engine.mu.getRaceColour(race) + name.substring(0, Math.min(9, name.length())) + ChatColor.GRAY + " [");
-		NametagBridge.setSuffix(player, "]");
+		String rpName = name == null ? "NONE" : name;
+		rpName = rpName.substring(0, Math.min(32, rpName.length()));
+
+		NametagBridge.clearNametag(player);
+		NametagBridge.setNameTagVisible(player, false);
+		if (!headNameHidden) {
+			Engine.overheadNames.show(player, Engine.mu.getRaceColour(race) + rpName + ChatColor.RESET);
+		} else {
+			Engine.overheadNames.hide(player);
+		}
+		applyTabListVisibility();
+	}
+
+	private void applyTabListVisibility() {
+		Player player = getPlayer();
+		if (player == null) {
+			return;
+		}
+		if (tabListHidden) {
+			player.setPlayerListName(" ");
+		} else {
+			player.setPlayerListName(null);
+		}
 	}
 
 	public static enum Channel {

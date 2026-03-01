@@ -47,14 +47,14 @@ public class RollCommand extends AbstractCommand {
 		if (sender instanceof Player) {
 			Engine.mu.sendRangedMessage(player
 					, Lang.ROLL_RESULT.toString()
-					.replace("%p", rpp.getPlayer().getName())
+					.replace("%p", rpp.getName())
 					.replace("%r", rpp.getName())
 					.replace("%n", Integer.toString(roll))
 					.replace("%m", Integer.toString(number))
 					, "rpRange");
 		} else {
 			plugin.getServer().broadcastMessage(Lang.ROLL_CONSOLE.toString()
-					.replace("%p", rpp.getPlayer().getName())
+					.replace("%p", rpp.getName())
 					.replace("%r", rpp.getName())
 					.replace("%n", Integer.toString(roll))
 					.replace("%m", Integer.toString(number)));

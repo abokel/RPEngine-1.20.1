@@ -34,6 +34,10 @@ public class CardCommand extends AbstractCommand {
 							sb2.append(args[j]).append(" ");
 						}
 						final String name = sb2.toString().trim().replace("\"", "");
+						if (name.length() > 32) {
+							player.sendMessage(ChatColor.RED + "RP name can not be longer than 32 characters.");
+							return true;
+						}
 						CardEditEvent event = new CardEditEvent(CardField.NAME, name, player, rpp);
 						Bukkit.getServer().getPluginManager().callEvent(event);
 						if (!event.isCancelled()) {
@@ -254,9 +258,24 @@ public class CardCommand extends AbstractCommand {
 			else {
 				Player csender = player.getServer().getPlayer(args[0]);
 				if (csender != null) {
-					Engine.card.sendCardOther(Engine.manager.getPlayer(csender.getUniqueId()), player);
+					com.Alvaeron.player.RoleplayPlayer targetRpp = Engine.manager.getPlayer(csender.getUniqueId());
+					if (targetRpp != null) {
+						Engine.card.sendCardOther(targetRpp, player);
+					} else {
+						com.Alvaeron.utils.Card.OfflineCard offlineCard = Engine.card.getOfflineCard(csender.getName());
+						if (offlineCard != null) {
+							Engine.card.sendCardOther(offlineCard, player);
+						} else {
+							player.sendMessage(Lang.CARD_OFFLINE.toString().replace("%p", csender.getName()));
+						}
+					}
 				} else {
-					player.sendMessage(Lang.CARD_OFFLINE.toString().replace("%p", args[0]));
+					com.Alvaeron.utils.Card.OfflineCard offlineCard = Engine.card.getOfflineCard(args[0]);
+					if (offlineCard != null) {
+						Engine.card.sendCardOther(offlineCard, player);
+					} else {
+						player.sendMessage(Lang.CARD_OFFLINE.toString().replace("%p", args[0]));
+					}
 				}
 			}
 		} else {
@@ -275,13 +294,18 @@ public class CardCommand extends AbstractCommand {
 	 *            the type of cooldown this is
 	 */
 	private boolean cardTime(final Player player, String type) {
-		if (!Cooldown.tryCooldown(player, type, (plugin.getConfig().getInt("cardCooldown") * 1000))) {
-			long timeLeft = TimeUnit.MILLISECONDS.toMinutes(Cooldown.getCooldown(player, type));
-			player.sendMessage(
-					ChatColor.RED + "You must wait " + timeLeft + " minutes before changing your " + type + " again.");
-			return false;
+		try {
+			if (!Cooldown.tryCooldown(player, type, (plugin.getConfig().getInt("cardCooldown") * 1000))) {
+				long timeLeft = TimeUnit.MILLISECONDS.toMinutes(Cooldown.getCooldown(player, type));
+				player.sendMessage(
+						ChatColor.RED + "You must wait " + timeLeft + " minutes before changing your " + type + " again.");
+				return false;
+			}
+			return true;
+		} catch (NoClassDefFoundError ex) {
+			plugin.getLogger().warning("Cooldown class not found at runtime. Skipping card cooldown check.");
+			return true;
 		}
-		return true;
 
 	}
 

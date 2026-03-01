@@ -33,6 +33,10 @@ commands:
   spawnpoint:
     description: Teleport command for nation spawnpoints
     aliases: [nationspawn, rpspawn, nationhome, rphome]
+  nametag:
+    description: Hide or show your overhead RP name
+  tablist:
+    description: Hide or show your tab list name
 
 permissions:
   #Spawnpoint permissions

@@ -38,17 +38,17 @@ public class BirdCommand extends AbstractCommand {
 						double time = (distance / plugin.getConfig().getDouble("speed")) * 20;
 						player.sendMessage(Lang.BIRD_SENT.toString()
 								.replace("%n", Engine.mu.getRaceColour(targetPlayer.getRace()) + targetPlayer.getName())
-								.replace("%p", targetPlayer.getPlayer().getName()));
+								.replace("%p", targetPlayer.getName()));
 						plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 							@Override
 							public void run() {
 								if (player.getServer().getPlayer(args[0]) != null) {
 									player.sendMessage(Lang.BIRD_DELIVER.toString()
 											.replace("%n", Engine.mu.getRaceColour(targetPlayer.getRace()) + targetPlayer.getName())
-											.replace("%p", targetPlayer.getPlayer().getName()));
+											.replace("%p", targetPlayer.getName()));
 									targetPlayer.getPlayer().sendMessage(Lang.BIRD_LAND.toString()
 											.replace("%n", Engine.mu.getRaceColour(rpp.getRace()) + rpp.getName())
-											.replace("%p", player.getName()));
+											.replace("%p", rpp.getName()));
 									targetPlayer.getPlayer().sendMessage(ChatColor.WHITE + message);
 									targetPlayer.getPlayer().sendMessage(ChatColor.AQUA + "-----------------------------");
 								} else {

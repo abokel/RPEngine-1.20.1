@@ -66,9 +66,9 @@ public enum Lang {
     SPAWNPOINT_TELEPORT("spawnpoint-teleport", "&aYou have been teleported to &f%n."),
     
     CHAT_SHOUT_USAGE("chat-shout-usage", "&cUsage: &f/%c [message]."),
-    CHAT_SHOUT_FORMAT("chat-shout-format", "&c[Shout] &7%n &f%m"),
+    CHAT_SHOUT_FORMAT("chat-shout-format", "&c%n &l%m"),
     CHAT_WHISPER_USAGE("chat-whisper-usage", "&cUsage: &f/%c [message]."),
-    CHAT_WHISPER_FORMAT("chat-whisper-format", "&9[Whisper] &7%n &f%m"),
+    CHAT_WHISPER_FORMAT("chat-whisper-format", "&5%n &o%m"),
     
     CARD_NAME_USAGE("card-name-usage", "&cUsage: &f/card name [name]."),
     CARD_AGE_RACE_MAX("card-age-race-max", "&cError: &g%r can not be any older than %a"),
